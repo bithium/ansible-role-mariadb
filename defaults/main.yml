@@ -1,0 +1,16 @@
+---
+# defaults file for mariadb
+
+mariadb_packages:
+  - mariadb
+  - mysql-client
+
+mariadb_service: mariadb
+
+mariadb_config_dir: /etc/mysql
+mariadb_config_file: "{{mariadb_config_dir}}/my.cnf"
+
+mariadb_extra_config_dir: /etc/mysql/conf.d
+mariadb_extra_config_file: "{{mariadb_extra_config_dir}}/25_ansible.cnf"
+
+# mariadb_config: {}

@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+
+  tasks:
+    - name: Setup local package cache
+      file:
+        src: /var/cache/apk
+        dest: /etc/apk/cache
+        state: link
+      when: ansible_os_family == 'Alpine'

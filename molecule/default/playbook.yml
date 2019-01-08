@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    mariadb_root_password: 'qwerty'
+    mariadb_config:
+      mysqld:
+        - skip-networking
+        - table_open_cache: 128
+      mysql:
+        - safe-updates
+
+  vars_files:
+    - goss.yml
+
+  roles:
+    - role: mariadb
+
+  tasks:
+    - name: Dump host variables for role
+      template: src=config.yml.j2 dest={{goss_test_variables}}

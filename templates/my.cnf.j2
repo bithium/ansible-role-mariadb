@@ -1,0 +1,19 @@
+##
+## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
+##
+
+{% if mariadb_config is defined %}
+  {% for section in mariadb_config -%}
+    [{{section}}]
+    {% for opt in mariadb_config[section] -%}
+      {% if opt is mapping -%}
+        {% for key in opt -%}
+           {{key}} = {{ opt[key] }}
+        {% endfor %}
+      {% else -%}
+        {{ opt }}
+      {% endif %}
+    {% endfor %}
+
+  {% endfor %}
+{% endif %}

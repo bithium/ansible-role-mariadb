@@ -1,0 +1,26 @@
+# Molecule managed
+
+---
+package:
+{{range .Vars.mariadb.packages}}
+  {{.}}:
+    installed: true
+{{end}}
+
+service:
+  {{.Vars.mariadb.service}}:
+    enabled: true
+    running: true
+
+file:
+  {{.Vars.mariadb.config_dir}}:
+    exists: true
+
+  {{.Vars.mariadb.config_file}}:
+    exists: true
+    contains:
+      - "[mysqld]"
+      - "skip-networking"
+      - "table_open_cache = 128"
+      - "[mysql]"
+      - "safe-updates"

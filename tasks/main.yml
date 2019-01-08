@@ -1,0 +1,55 @@
+---
+# tasks file for mariadb
+
+- name: Install MariaDB
+  package:
+    name: "{{mariadb_packages}}"
+    state: present
+
+- name: Initialize database
+  command: /etc/init.d/mariadb setup
+  args:
+    creates: /var/lib/mysql/mysql-bin.index
+
+- name: Enable and start MariaDB service
+  service:
+    name: "{{mariadb_service}}"
+    enabled: true
+    state: started
+
+- name: Check for root database user password.
+  fail: msg="Please define `mariadb_root_password` variable with the root user password"
+  when: mariadb_root_password is not defined
+
+- name: Prepare MySQL secure installation for non-interactive usage
+  lineinfile:
+    path: /usr/bin/mysql_secure_installation
+    state: absent
+    regexp: 'stty'
+
+- name: Run MySQL secure installation script
+  shell: |
+    echo ",,{{mariadb_root_password}},{{mariadb_root_password}},,,,," | tr ',' '\n' | \
+      /usr/bin/mysql_secure_installation
+    touch /etc/mysql/.secured
+  args:
+    creates: /etc/mysql/.secured
+    warn: false
+
+- name: Include 25_ansible.conf in my.cnf
+  lineinfile: line="include 'conf.d/25_ansible.conf'" dest="{{ mariadb_config_file }}"
+  when: mariadb_config is defined
+
+- name: Create conf.d
+  file:
+    path: "{{ mariadb_extra_config_dir }}"
+    state: directory
+  when: mariadb_config is defined
+
+- name: Create configuration file
+  template:
+    src: my.cnf.j2
+    dest: "{{mariadb_extra_config_file}}"
+    lstrip_blocks: true
+  notify: restart mariadb
+  when: mariadb_config is defined
