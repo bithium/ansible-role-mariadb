@@ -13,9 +13,6 @@ service:
     running: true
 
 file:
-  {{.Vars.mariadb.config_dir}}:
-    exists: true
-
   {{.Vars.mariadb.config_file}}:
     exists: true
     contains:

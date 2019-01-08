@@ -1,2 +1,6 @@
 ---
 # vars file for mariadb
+
+mariadb_packages: "{{mariadb_package_names[ansible_os_family]}}"
+
+mariadb_service: "{{mariadb_service_names[ansible_os_family]}}"

@@ -18,6 +18,30 @@ platforms:
       - "/mnt/mirrors/alpine/3.8:/var/cache/apk"
     privileged: true
     command: /sbin/init
+  - name: mariadb-debian-stable
+    image: debian:stable
+    volumes:
+      - "/mnt/mirrors/debian/stable:/var/cache/apt/archives"
+    privileged: true
+    command: sleep infinity
+  - name: mariadb-debian-testing
+    image: debian:testing
+    volumes:
+      - "/mnt/mirrors/debian/testing:/var/cache/apt/archives"
+    privileged: true
+    command: sleep infinity
+  - name: mariadb-ubuntu-16.04
+    image: ubuntu:16.04
+    volumes:
+      - "/mnt/mirrors/ubuntu/16.04:/var/cache/apt/archives"
+    privileged: true
+    command: sleep infinity
+  - name: mariadb-ubuntu-18.04
+    image: ubuntu:18.04
+    volumes:
+      - "/mnt/mirrors/ubuntu/18.04:/var/cache/apt/archives"
+    privileged: true
+    command: sleep infinity
 provisioner:
   name: ansible
   lint:

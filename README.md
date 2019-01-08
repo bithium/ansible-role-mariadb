@@ -26,15 +26,24 @@ Available variables are listed below, along with default values (see `defaults/m
  * Packages to install:
 
    ```yaml
-   mariadb_packages:
-   - mariadb
-   - mysql-client
+   mariadb_package_names:
+     Alpine:
+       - mariadb
+       - mysql-client
+     Debian:
+       - mariadb-server
+
+   mariadb_packages: "{{mariadb_package_names[ansible_os_family]}}"
    ```
 
  * Database service name:
 
    ```yaml
-   mariadb_service: mariadb
+   mariadb_service_names:
+     Alpine: "mariadb"
+     Debian: "mysql"
+
+   mariadb_service: "{{mariadb_service_names[ansible_os_family]}}"
    ```
 
  * Configuration folder:
@@ -49,16 +58,10 @@ Available variables are listed below, along with default values (see `defaults/m
    mariadb_config_file: "{{mariadb_config_dir}}/my.cnf"
    ```
 
- * Extra configuration folder:
-
-   ```yaml
-   mariadb_extra_config_dir: /etc/mysql/conf.d
-   ```
-
  * Extra configuration file:
 
    ```yaml
-   mariadb_extra_config_file: "{{mariadb_extra_config_dir}}/25_ansible.cnf"
+   mariadb_extra_config_file: "{{mariadb_config_dir}}/ansible.cnf"
    ```
 
  * Database configuration:

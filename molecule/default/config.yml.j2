@@ -1,5 +1,4 @@
 mariadb:
     packages: {{mariadb_packages | to_json}}
     service: {{mariadb_service | quote}}
-    config_dir: {{mariadb_extra_config_dir | quote}}
     config_file: {{mariadb_extra_config_file | quote}}

@@ -1,16 +1,20 @@
 ---
 # defaults file for mariadb
 
-mariadb_packages:
-  - mariadb
-  - mysql-client
+mariadb_package_names:
+  Alpine:
+    - mariadb
+    - mysql-client
+  Debian:
+    - mariadb-server
 
-mariadb_service: mariadb
+mariadb_service_names:
+  Alpine: "mariadb"
+  Debian: "mysql"
 
 mariadb_config_dir: /etc/mysql
 mariadb_config_file: "{{mariadb_config_dir}}/my.cnf"
 
-mariadb_extra_config_dir: /etc/mysql/conf.d
-mariadb_extra_config_file: "{{mariadb_extra_config_dir}}/25_ansible.cnf"
+mariadb_extra_config_file: "{{mariadb_config_dir}}/ansible.cnf"
 
 # mariadb_config: {}

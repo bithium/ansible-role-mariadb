@@ -13,6 +13,14 @@ galaxy_info:
       version:
         - 3.7
         - 3.8
+    - name: Debian
+      version:
+        - Stable
+        - Testing
+    - name: Ubuntu
+      version:
+        - 16.04
+        - 18.04
 
   galaxy_tags:
     - mariadb

@@ -9,7 +9,7 @@
 - name: Initialize database
   command: /etc/init.d/mariadb setup
   args:
-    creates: /var/lib/mysql/mysql-bin.index
+    creates: /var/lib/mysql/mysql/general_log.CSV
 
 - name: Enable and start MariaDB service
   service:
@@ -36,14 +36,8 @@
     creates: /etc/mysql/.secured
     warn: false
 
-- name: Include 25_ansible.conf in my.cnf
-  lineinfile: line="include 'conf.d/25_ansible.conf'" dest="{{ mariadb_config_file }}"
-  when: mariadb_config is defined
-
-- name: Create conf.d
-  file:
-    path: "{{ mariadb_extra_config_dir }}"
-    state: directory
+- name: Include ansible.cnf in my.cnf
+  lineinfile: line="!include {{mariadb_extra_config_file}}" dest="{{ mariadb_config_file }}"
   when: mariadb_config is defined
 
 - name: Create configuration file
