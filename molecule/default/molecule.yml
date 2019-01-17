@@ -28,20 +28,35 @@ platforms:
     image: debian:testing
     volumes:
       - "/mnt/mirrors/debian/testing:/var/cache/apt/archives"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     privileged: true
-    command: sleep infinity
+    command: /sbin/init
   - name: mariadb-ubuntu-16.04
     image: ubuntu:16.04
     volumes:
       - "/mnt/mirrors/ubuntu/16.04:/var/cache/apt/archives"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     privileged: true
-    command: sleep infinity
+    command: /sbin/init
   - name: mariadb-ubuntu-18.04
     image: ubuntu:18.04
     volumes:
       - "/mnt/mirrors/ubuntu/18.04:/var/cache/apt/archives"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     privileged: true
-    command: sleep infinity
+    command: /sbin/init
 provisioner:
   name: ansible
   lint:

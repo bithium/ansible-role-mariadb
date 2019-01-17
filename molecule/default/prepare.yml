@@ -15,9 +15,3 @@
         path: /etc/apt/apt.conf.d/docker-clean
         state: absent
       when: ansible_os_family == 'Debian'
-
-    - name: Ensure systemd is installed for Ubuntu 18.04
-      package:
-        name: "systemd"
-        state: present
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
