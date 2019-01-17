@@ -29,11 +29,10 @@
 
 - name: Run MySQL secure installation script
   shell: |
-    echo ",,{{mariadb_root_password}},{{mariadb_root_password}},,,,," | tr ',' '\n' | \
-      /usr/bin/mysql_secure_installation
-    touch /etc/mysql/.secured
+    echo ",y,{{mariadb_root_password | trim}},{{mariadb_root_password | trim}},y,y,y,y," | tr ',' '\n' | \
+      /usr/bin/mysql_secure_installation > /var/log/mysql_secure.log
   args:
-    creates: /etc/mysql/.secured
+    creates: /var/log/mysql_secure.log
     warn: false
 
 - name: Include ansible.cnf in my.cnf
