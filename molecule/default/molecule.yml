@@ -10,20 +10,38 @@ platforms:
     image: alpine:3.7
     volumes:
       - "/mnt/mirrors/alpine/3.7:/var/cache/apk"
-    privileged: true
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    capabilities:
+      - SYS_ADMIN
     command: /sbin/init
   - name: mariadb-alpine-3.8
     image: alpine:3.8
     volumes:
       - "/mnt/mirrors/alpine/3.8:/var/cache/apk"
-    privileged: true
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    capabilities:
+      - SYS_ADMIN
     command: /sbin/init
   - name: mariadb-debian-stable
     image: debian:stable
     volumes:
       - "/mnt/mirrors/debian/stable:/var/cache/apt/archives"
-    privileged: true
-    command: sleep infinity
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    capabilities:
+      - SYS_ADMIN
+    command: /bin/systemd
   - name: mariadb-debian-testing
     image: debian:testing
     volumes:
@@ -33,6 +51,9 @@ platforms:
       - /tmp
       - /run
       - /run/lock
+      - /var/run
+    capabilities:
+      - SYS_ADMIN
     privileged: true
     command: /sbin/init
   - name: mariadb-ubuntu-16.04
@@ -44,7 +65,8 @@ platforms:
       - /tmp
       - /run
       - /run/lock
-    privileged: true
+    capabilities:
+      - SYS_ADMIN
     command: /sbin/init
   - name: mariadb-ubuntu-18.04
     image: ubuntu:18.04
@@ -55,7 +77,8 @@ platforms:
       - /tmp
       - /run
       - /run/lock
-    privileged: true
+    capabilities:
+      - SYS_ADMIN
     command: /sbin/init
 provisioner:
   name: ansible
