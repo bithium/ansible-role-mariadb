@@ -35,6 +35,13 @@
     creates: /var/log/mysql_secure.log
     warn: false
 
+- name: Tweak configuration path
+  set_fact:
+    mariadb_config_dir: /etc
+  when:
+    - ansible_os_family == 'Alpine'
+    - ansible_facts['distribution_version'] is version('3.9', '>=')
+
 - name: Include ansible.cnf in my.cnf
   lineinfile: line="!include {{mariadb_extra_config_file}}" dest="{{ mariadb_config_file }}"
   when: mariadb_config is defined
