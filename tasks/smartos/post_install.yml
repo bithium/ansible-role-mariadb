@@ -1,0 +1,41 @@
+---
+# tasks file for SmartOS configuration
+
+- name: Stop MariaDB service
+  service:
+    name: "{{mariadb_service}}"
+    state: stopped
+
+- name: Change InnoDB data path in configuration
+  lineinfile:
+    path: /opt/local/etc/my.cnf
+    regexp: '^innodb_data_home_dir'
+    line: 'innodb_data_home_dir=/var/mysql/innodb'
+
+- name: Change InnoDB logs path in configuration
+  lineinfile:
+    path: /opt/local/etc/my.cnf
+    regexp: '^innodb_log_group_home_dir'
+    line: 'innodb_log_group_home_dir=/var/mysql/logs'
+
+- name: Move InnoDB data files to correct path
+  shell: mv /var/mysql/ibdata* /var/mysql/innodb/
+  args:
+    removes: /var/mysql/ibdata1
+
+- name: Move InnoDB log files to correct path
+  shell: mv /var/mysql/ib_logfile* /var/mysql/logs/
+  args:
+    removes: /var/mysql/ib_logfile1
+
+- name: Fix permissions for database files
+  file:
+    path: /var/mysql
+    owner: mysql
+    group: mysql
+    recurse: true
+
+- name: Start MariaDB service
+  service:
+    name: "{{mariadb_service}}"
+    state: started
