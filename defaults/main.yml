@@ -12,9 +12,20 @@ mariadb_service_names:
   Alpine: "mariadb"
   Debian: "mysql"
 
-mariadb_config_dir: /etc/mysql
-mariadb_config_file: "{{mariadb_config_dir}}/my.cnf"
+mariadb_config_paths:
+  Alpine: /etc/mysql
+  Debian: /etc/mysql
 
-mariadb_extra_config_file: "{{mariadb_config_dir}}/ansible.cnf"
+mariadb_config_file_paths:
+  Alpine: /etc/mysql
+  Debian: /etc/mysql
+
+mariadb_data_paths:
+  Alpine: /var/lib/mysql
+  Debian: /var/lib/mysql
+
+mariadb_secure_script_paths:
+  Alpine: /usr/bin/mysql_secure_installation
+  Debian: /usr/bin/mysql_secure_installation
 
 # mariadb_config: {}

@@ -1,50 +1,30 @@
 ---
 # tasks file for mariadb
 
+- name: Check for root database user password
+  fail: msg="Please define `mariadb_root_password` variable with the root user password"
+  when: mariadb_root_password is not defined
+
+- name: Tweak configuration path
+  set_fact:
+    mariadb_config_path: /etc
+  when:
+    - ansible_os_family == 'Alpine'
+    - ansible_facts['distribution_version'] is version('3.9', '>=')
+
 - name: Install MariaDB
   package:
     name: "{{mariadb_packages}}"
     state: present
 
-- name: Initialize database
-  command: /etc/init.d/mariadb setup
-  args:
-    creates: /var/lib/mysql/mysql/general_log.CSV
-
-- name: Enable and start MariaDB service
-  service:
-    name: "{{mariadb_service}}"
-    enabled: true
-    state: started
-
-- name: Check for root database user password.
-  fail: msg="Please define `mariadb_root_password` variable with the root user password"
-  when: mariadb_root_password is not defined
-
-- name: Prepare MySQL secure installation for non-interactive usage
-  lineinfile:
-    path: /usr/bin/mysql_secure_installation
-    state: absent
-    regexp: 'stty'
-
-- name: Run MySQL secure installation script
-  shell: |
-    echo ",y,{{mariadb_root_password | trim}},{{mariadb_root_password | trim}},y,y,y,y," | tr ',' '\n' | \
-      /usr/bin/mysql_secure_installation > /var/log/mysql_secure.log
-  args:
-    creates: /var/log/mysql_secure.log
-    warn: false
-
-- name: Tweak configuration path
-  set_fact:
-    mariadb_config_dir: /etc
-  when:
-    - ansible_os_family == 'Alpine'
-    - ansible_facts['distribution_version'] is version('3.9', '>=')
-
 - name: Include ansible.cnf in my.cnf
-  lineinfile: line="!include {{mariadb_extra_config_file}}" dest="{{ mariadb_config_file }}"
+  lineinfile: line="!include {{mariadb_extra_config_file}}" dest="{{mariadb_config_file}}"
   when: mariadb_config is defined
+
+- name: Create configuration folder
+  file:
+    path: "{{mariadb_extra_config_file | dirname}}"
+    state: directory
 
 - name: Create configuration file
   template:
@@ -53,3 +33,29 @@
     lstrip_blocks: true
   notify: restart mariadb
   when: mariadb_config is defined
+
+- name: Initialize database
+  command: /etc/init.d/mariadb setup
+  args:
+    creates: "{{mariadb_data_path}}/mysql/general_log.CSV"
+
+- name: Enable and start MariaDB service
+  service:
+    name: "{{mariadb_service}}"
+    enabled: true
+    state: started
+
+- name: Prepare MySQL secure installation for non-interactive usage
+  lineinfile:
+    path: "{{mariadb_secure_script}}"
+    state: absent
+    regexp: 'stty'
+
+- name: Run MySQL secure installation script
+  shell: |
+    echo ",y,{{mariadb_root_password | trim}},{{mariadb_root_password | trim}},y,y,y,y," | tr ',' '\n' | \
+      {{mariadb_secure_script}} > /var/log/mysql_secure.log
+  args:
+    creates: /var/log/mysql_secure.log
+    warn: false
+
