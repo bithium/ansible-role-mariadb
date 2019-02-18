@@ -7,7 +7,7 @@ mariadb_service: "{{mariadb_service_names[ansible_os_family]}}"
 
 mariadb_config_path: "{{mariadb_config_paths[ansible_os_family]}}"
 
-mariadb_config_file: "{{mariadb_config_path}}/my.cnf"
+mariadb_config_file: "{{mariadb_config_file_paths[ansible_os_family]}}/my.cnf"
 
 mariadb_secure_script: "{{mariadb_secure_script_paths[ansible_os_family]}}"
 
