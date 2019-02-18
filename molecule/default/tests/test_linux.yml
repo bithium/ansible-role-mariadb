@@ -1,0 +1,13 @@
+# Molecule managed
+
+---
+package:
+{{range .Vars.mariadb.packages}}
+  {{.}}:
+    installed: true
+{{end}}
+
+service:
+  {{.Vars.mariadb.service}}:
+    enabled: true
+    running: true
