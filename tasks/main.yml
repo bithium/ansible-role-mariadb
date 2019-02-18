@@ -5,6 +5,16 @@
   fail: msg="Please define `mariadb_root_password` variable with the root user password"
   when: mariadb_root_password is not defined
 
+- name: Include OS specific configuration values
+  include_vars: "{{lookup('first_found', params)}}"
+  vars:
+    params:
+      files:
+        - "{{ansible_distribution | lower}}.yml"
+        - "{{ansible_os_family | lower}}.yml"
+      paths:
+        - vars
+
 - name: Tweak configuration path
   set_fact:
     mariadb_config_path: /etc

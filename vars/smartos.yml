@@ -1,0 +1,15 @@
+# MariaDB SmartOS configuration values.
+---
+
+mariadb_packages:
+  - mariadb-server
+
+mariadb_service: mariadb
+
+mariadb_config_path: /opt/local/etc/mysql
+
+mariadb_config_file: /opt/local/etc//my.cnf
+
+mariadb_data_path: /var/mysql
+
+mariadb_secure_script: /opt/local/bin/mysql_secure_installation

@@ -1,0 +1,7 @@
+# MariaDB Debian OS configuration values.
+---
+
+mariadb_packages:
+  - mariadb-server
+
+mariadb_service: mysql
