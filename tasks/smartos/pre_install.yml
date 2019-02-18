@@ -4,12 +4,14 @@
 - name: Retrieve Zone UUID
   command: zonename
   register: zonename
-  check_mode: no
+  check_mode: false
+  changed_when: false
 
 - name: Set fact for Zone UUID
   set_fact:
     zone_uuid: "{{zonename.stdout}}"
-  check_mode: no
+  check_mode: false
+  changed_when: false
 
 - name: Check if ZFS datapool exists
   zfs_facts:
