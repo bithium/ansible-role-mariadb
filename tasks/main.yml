@@ -51,6 +51,13 @@
   command: /etc/init.d/mariadb setup
   args:
     creates: "{{mariadb_data_path}}/mysql/general_log.CSV"
+  when: ansible_os_family != 'Alpine'
+
+- name: Initialize database
+  command: mysql_install_db --user=mysql --datadir={{mariadb_data_path}}
+  args:
+    creates: "{{mariadb_data_path}}/mysql/general_log.CSV"
+  when: ansible_os_family == 'Alpine'
 
 - name: Enable and start MariaDB service
   service:
