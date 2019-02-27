@@ -1,6 +1,14 @@
 ---
 # tasks file for SmartOS configuration
 
+- name: Create root user configuration file
+  copy:
+    dest: /root/.my.cnf
+    mode: 0600
+    content: |
+      [client]
+      password={{mariadb_root_password}}
+
 - name: Change InnoDB data path in configuration
   lineinfile:
     path: "{{mariadb_base_path}}/etc/my.cnf"

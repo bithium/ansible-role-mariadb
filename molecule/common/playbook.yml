@@ -11,6 +11,19 @@
       mysql:
         - safe-updates
 
+    mariadb_ansible_packages:
+      Alpine:
+        - mariadb-dev
+        - py-mysqldb
+      Debian:
+        - default-libmysqlclient-dev
+        - python-pymysql
+      Ubuntu:
+        - libmysqlclient-dev
+        - python-pymysql
+      SmartOS:
+        - py37-pymysql
+
   vars_files:
     - goss.yml
 
@@ -18,5 +31,33 @@
     - role: mariadb
 
   tasks:
+    - name: Install ansible required dependencies
+      package: name={{mariadb_ansible_packages[ansible_distribution]}}
+
+    - name: Set MariaDB socket path fact
+      block:
+        - name: Read configuration value
+          command: mysql_config --socket
+          register: mysql_config_results
+          check_mode: false
+          changed_when: false
+
+        - name: Set configuration value fact
+          set_fact:
+            mysql_socket_path: "{{mysql_config_results.stdout | trim}}"
+
+    - name: Create dummy database
+      mysql_db:
+        name: sandbox
+        encoding: utf8
+        login_unix_socket: "{{mysql_socket_path}}"
+
+    - name: Create application database user
+      mysql_user:
+        name: auser
+        password: qwerty
+        priv: sandbox.*:ALL
+        login_unix_socket: "{{mysql_socket_path}}"
+
     - name: Dump host variables for role
       template: src=config.yml.j2 dest={{goss_test_variables}}
