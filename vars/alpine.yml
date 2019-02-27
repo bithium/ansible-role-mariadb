@@ -4,5 +4,3 @@
 mariadb_packages:
   - mariadb
   - mysql-client
-
-mariadb_service: mariadb

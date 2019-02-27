@@ -29,10 +29,10 @@
   loop:
     - name: mariadb
       recordsize: 8K
-      mountpoint: /var/mysql
+      mountpoint: "{{mariadb_data_path}}"
     - name: mariadb/innodb
       recordsize: 16K
-      mountpoint: /var/mysql/innodb
+      mountpoint: "{{mariadb_data_path}}/innodb"
     - name: mariadb/logs
       recordsize: 128K
-      mountpoint: /var/mysql/logs
+      mountpoint: "{{mariadb_data_path}}/logs"

@@ -1,12 +1,15 @@
 ---
 # vars file for mariadb
 
+mariadb_service: mariadb
+
 mariadb_config_path: /etc/mysql
 
 mariadb_config_file: "{{mariadb_config_path}}/my.cnf"
 
 mariadb_extra_config_file: "{{mariadb_config_path}}/ansible.cnf"
 
+mariadb_base_path: /usr
 mariadb_data_path: /var/lib/mysql
 
-mariadb_secure_script: /usr/bin/mysql_secure_installation
+mariadb_secure_script: "{{mariadb_base_path}}/bin/mysql_secure_installation"

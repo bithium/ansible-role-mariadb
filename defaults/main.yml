@@ -1,38 +1,19 @@
 ---
 # defaults file for mariadb
 
-mariadb_package_names:
-  Alpine:
-    - mariadb
-    - mysql-client
-  Debian:
-    - mariadb-server
-  Solaris:
-    - mariadb-server
+mariadb_packages:
+  - mariadb-client
+  - mariadb-server
 
-mariadb_service_names:
-  Alpine: "mariadb"
-  Debian: "mysql"
-  Solaris: "mariadb"
+mariadb_service: mariadb
 
-mariadb_config_paths:
-  Alpine: /etc/mysql
-  Debian: /etc/mysql
-  Solaris: /opt/local/etc/mysql
+mariadb_base_path: /usr
 
-mariadb_config_file_paths:
-  Alpine: /etc/mysql
-  Debian: /etc/mysql
-  Solaris: /opt/local/etc
+mariadb_data_path: /var/lib/mysql
 
-mariadb_data_paths:
-  Alpine: /var/lib/mysql
-  Debian: /var/lib/mysql
-  Solaris: /var/mysql
+mariadb_config_path: /etc/mysql
 
-mariadb_secure_script_paths:
-  Alpine: /usr/bin/mysql_secure_installation
-  Debian: /usr/bin/mysql_secure_installation
-  Solaris: /opt/local/bin/mysql_secure_installation
+mariadb_user: mysql
+mariadb_group: mysql
 
 # mariadb_config: {}
