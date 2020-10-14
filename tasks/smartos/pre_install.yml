@@ -9,30 +9,30 @@
 
 - name: Set fact for Zone UUID
   set_fact:
-    zone_uuid: "{{zonename.stdout}}"
+    zone_uuid: "{{ zonename.stdout }}"
   check_mode: false
   changed_when: false
 
 - name: Check if ZFS datapool exists
   zfs_facts:
-    name: zones/{{zone_uuid}}/data
+    name: zones/{{ zone_uuid }}/data
     type: filesystem
 
 - name: Setup ZFS datapools for MariaDB
   zfs:
-    name: zones/{{zone_uuid}}/data/{{item.name}}
+    name: zones/{{ zone_uuid }}/data/{{ item.name }}
     state: present
     extra_zfs_properties:
-      recordsize: "{{item.recordsize}}"
-      mountpoint: "{{item.mountpoint}}"
+      recordsize: "{{ item.recordsize }}"
+      mountpoint: "{{ item.mountpoint }}"
       atime: false
   loop:
     - name: mariadb
       recordsize: 8K
-      mountpoint: "{{mariadb_data_path}}"
+      mountpoint: "{{ mariadb_data_path }}"
     - name: mariadb/innodb
       recordsize: 16K
-      mountpoint: "{{mariadb_data_path}}/innodb"
+      mountpoint: "{{ mariadb_data_path }}/innodb"
     - name: mariadb/logs
       recordsize: 128K
-      mountpoint: "{{mariadb_data_path}}/logs"
+      mountpoint: "{{ mariadb_data_path }}/logs"

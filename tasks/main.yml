@@ -6,12 +6,12 @@
   when: mariadb_root_password is not defined
 
 - name: Include OS specific configuration values
-  include_vars: "{{lookup('first_found', params)}}"
+  include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
-        - "{{ansible_distribution | lower}}.yml"
-        - "{{ansible_os_family | lower}}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
       paths:
         - vars
 
@@ -27,51 +27,55 @@
 
 - name: Install MariaDB
   package:
-    name: "{{mariadb_packages}}"
+    name: "{{ mariadb_packages }}"
     state: present
 
 - name: Include ansible.cnf in my.cnf
-  lineinfile: line="!include {{mariadb_extra_config_file}}" dest="{{mariadb_config_file}}"
+  lineinfile: line="!include {{ mariadb_extra_config_file }}" dest="{{ mariadb_config_file }}"
   when: mariadb_config is defined
 
 - name: Create configuration folder
   file:
-    path: "{{mariadb_extra_config_file | dirname}}"
+    path: "{{ mariadb_extra_config_file | dirname }}"
     state: directory
+    mode: 0755
 
 - name: Create configuration file
   template:
     src: my.cnf.j2
-    dest: "{{mariadb_extra_config_file}}"
+    dest: "{{ mariadb_extra_config_file }}"
     lstrip_blocks: true
+    mode: 0644
   notify: restart mariadb
   when: mariadb_config is defined
 
 - name: Initialize database
   command: >
-    mysql_install_db --user=mysql --datadir={{mariadb_data_path}} --auth-root-authentication-method=socket
+    mysql_install_db --user=mysql --datadir={{ mariadb_data_path }} --auth-root-authentication-method=socket
   args:
-    creates: "{{mariadb_data_path}}/mysql/general_log.CSV"
+    creates: "{{ mariadb_data_path }}/mysql/general_log.CSV"
 
 - name: Enable and start MariaDB service
   service:
-    name: "{{mariadb_service}}"
+    name: "{{ mariadb_service }}"
     enabled: true
     state: started
 
 - name: Prepare MySQL secure installation for non-interactive usage
   lineinfile:
-    path: "{{mariadb_secure_script}}"
+    path: "{{ mariadb_secure_script }}"
     state: absent
     regexp: 'stty'
 
 - name: Run MySQL secure installation script
   shell: |
-    echo ",y,{{mariadb_root_password | trim}},{{mariadb_root_password | trim}},y,y,y,y," | tr ',' '\n' | \
-      {{mariadb_secure_script}} > /var/log/mysql_secure.log
+    set -o pipefail &&
+    echo ",y,{{ mariadb_root_password | trim }},{{ mariadb_root_password | trim }},y,y,y,y," | tr ',' '\n' | \
+      {{ mariadb_secure_script }} > /var/log/mysql_secure.log
   args:
     creates: /var/log/mysql_secure.log
     warn: false
+    executable: /bin/bash
 
 - include_tasks: smartos/post_install.yml
   when: ansible_distribution == 'SmartOS'

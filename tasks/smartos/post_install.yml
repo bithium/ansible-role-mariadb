@@ -7,49 +7,49 @@
     mode: 0600
     content: |
       [client]
-      password={{mariadb_root_password}}
+      password={{ mariadb_root_password }}
 
 - name: Change InnoDB data path in configuration
   lineinfile:
-    path: "{{mariadb_base_path}}/etc/my.cnf"
+    path: "{{ mariadb_base_path }}/etc/my.cnf"
     regexp: '^innodb_data_home_dir'
-    line: 'innodb_data_home_dir={{mariadb_data_path}}/innodb'
+    line: 'innodb_data_home_dir={{ mariadb_data_path }}/innodb'
 
 - name: Change InnoDB logs path in configuration
   lineinfile:
-    path: "{{mariadb_base_path}}/etc/my.cnf"
+    path: "{{ mariadb_base_path }}/etc/my.cnf"
     regexp: '^innodb_log_group_home_dir'
-    line: 'innodb_log_group_home_dir={{mariadb_data_path}}/logs'
+    line: 'innodb_log_group_home_dir={{ mariadb_data_path }}/logs'
 
 - name: Check data files status
   stat:
-    path: "{{mariadb_data_path}}/ibdata1"
+    path: "{{ mariadb_data_path }}/ibdata1"
   register: mariadb_data
 
 - name: Stop MariaDB service
   service:
-    name: "{{mariadb_service}}"
+    name: "{{ mariadb_service }}"
     state: stopped
   when: mariadb_data.stat.exists
 
 - name: Move InnoDB data files to correct path
-  shell: mv {{mariadb_data_path}}/ibdata* {{mariadb_data_path}}/innodb/
+  shell: mv {{ mariadb_data_path }}/ibdata* {{ mariadb_data_path }}/innodb/
   args:
-    removes: "{{mariadb_data_path}}/ibdata1"
+    removes: "{{ mariadb_data_path }}/ibdata1"
 
 - name: Move InnoDB log files to correct path
-  shell: mv {{mariadb_data_path}}/ib_logfile* {{mariadb_data_path}}/logs/
+  shell: mv {{ mariadb_data_path }}/ib_logfile* {{ mariadb_data_path }}/logs/
   args:
-    removes: "{{mariadb_data_path}}/ib_logfile1"
+    removes: "{{ mariadb_data_path }}/ib_logfile1"
 
 - name: Fix permissions for database files
   file:
-    path: "{{mariadb_data_path}}"
-    owner: "{{mariadb_user}}"
-    group: "{{mariadb_group}}"
+    path: "{{ mariadb_data_path }}"
+    owner: "{{ mariadb_user }}"
+    group: "{{ mariadb_group }}"
     recurse: true
 
 - name: Start MariaDB service
   service:
-    name: "{{mariadb_service}}"
+    name: "{{ mariadb_service }}"
     state: started

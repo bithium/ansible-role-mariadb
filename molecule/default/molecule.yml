@@ -86,6 +86,9 @@ platforms:
 provisioner:
   name: ansible
   # log: true
+  config_options:
+    defaults:
+      interpreter_python: "/usr/bin/python"
   playbooks:
     prepare: ../common/prepare.yml
     converge: ../common/playbook.yml
