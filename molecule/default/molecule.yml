@@ -24,11 +24,6 @@ platforms:
     volumes:
       - "/mnt/mirrors/debian/stable:/var/cache/apt/archives"
     command: /lib/systemd/systemd
-  - name: mariadb-ubuntu-16.04
-    image: ubuntu:16.04
-    volumes:
-      - "/mnt/mirrors/ubuntu/16.04:/var/cache/apt/archives"
-    command: /sbin/init
   - name: mariadb-ubuntu-18.04
     image: ubuntu:18.04
     volumes:
