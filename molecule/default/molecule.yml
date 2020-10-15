@@ -45,20 +45,6 @@ platforms:
     capabilities:
       - SYS_ADMIN
     command: /bin/systemd
-  - name: mariadb-debian-testing
-    image: debian:testing
-    volumes:
-      - "/mnt/mirrors/debian/testing:/var/cache/apt/archives"
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    tmpfs:
-      - /tmp
-      - /run
-      - /run/lock
-      - /var/run
-    capabilities:
-      - SYS_ADMIN
-    privileged: true
-    command: /sbin/init
   - name: mariadb-ubuntu-16.04
     image: ubuntu:16.04
     volumes:
