@@ -14,13 +14,13 @@
     mariadb_ansible_packages:
       Alpine:
         - mariadb-dev
-        - py-mysqldb
+        - py3-mysqlclient
       Debian:
         - default-libmysqlclient-dev
-        - python-pymysql
+        - python3-pymysql
       Ubuntu:
         - libmysqlclient-dev
-        - python-pymysql
+        - python3-pymysql
       SmartOS:
         - py37-pymysql
 
