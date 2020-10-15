@@ -19,6 +19,11 @@ platforms:
     volumes:
       - "/mnt/mirrors/alpine/3.11:/var/cache/apk"
     command: /sbin/init
+  - name: mariadb-alpine-3.12
+    image: alpine:3.12
+    volumes:
+      - "/mnt/mirrors/alpine/3.12:/var/cache/apk"
+    command: /sbin/init
   - name: mariadb-debian-stable
     image: debian:stable
     volumes:
